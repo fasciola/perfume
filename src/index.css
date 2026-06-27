@@ -4,7 +4,7 @@
 @theme {
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "Inter", sans-serif;
-  
+
   --color-gold: #C9A66B;
   --color-gold-dark: #B38F54;
   --color-amber-gold: #A66A2C;
@@ -12,7 +12,7 @@
   --color-beige: #D8C9B5;
   --color-luxury-black: #070707;
   --color-luxury-gray: #111111;
-  
+
   --animate-smoke: smoke 20s ease-in-out infinite;
   --animate-float: float 6s ease-in-out infinite;
   --animate-gold-dust: gold-dust 15s linear infinite;
@@ -34,7 +34,6 @@
   }
 }
 
-/* Custom styles for luxury touch */
 body {
   background-color: #070707;
   color: #F4EFE6;
@@ -42,22 +41,11 @@ body {
   overflow-x: hidden;
 }
 
-/* Custom premium scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #070707;
-}
-::-webkit-scrollbar-thumb {
-  background: #C9A66B33;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #C9A66B66;
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #070707; }
+::-webkit-scrollbar-thumb { background: #C9A66B33; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #C9A66B66; }
 
-/* Luxury card glassmorphism */
 .glass-perfume-card {
   background: rgba(17, 17, 17, 0.75);
   backdrop-filter: blur(12px);
@@ -70,25 +58,15 @@ body {
   box-shadow: 0 10px 30px -10px rgba(166, 106, 44, 0.3);
 }
 
-/* Golden glow text */
-.text-gold-glow {
-  text-shadow: 0 0 12px rgba(201, 166, 107, 0.4);
-}
+.text-gold-glow { text-shadow: 0 0 12px rgba(201, 166, 107, 0.4); }
+.text-gold-glow-subtle { text-shadow: 0 0 8px rgba(201, 166, 107, 0.2); }
 
-.text-gold-glow-subtle {
-  text-shadow: 0 0 8px rgba(201, 166, 107, 0.2);
-}
-
-/* Floating Island Image Mask to completely blend images into black background without borders */
 .floating-island-mask {
   mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 72%);
   -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 72%);
 }
 
-/* Soft gold drop-shadow for three-dimensional atmospheric depth */
-.floating-island-glow {
-  filter: drop-shadow(0 12px 24px rgba(201, 166, 107, 0.18));
-}
+.floating-island-glow { filter: drop-shadow(0 12px 24px rgba(201, 166, 107, 0.18)); }
 
 .perfume-glow {
   position: absolute;
@@ -100,7 +78,6 @@ body {
   pointer-events: none;
 }
 
-/* Dynamic colors based on product artwork images */
 .colored-perfume-card {
   --perfume-accent: #c9a66b;
   --perfume-glow: rgba(201, 166, 107, 0.4);
@@ -109,37 +86,77 @@ body {
   --perfume-bg-glow: rgba(201, 166, 107, 0.12);
 }
 
-.colored-perfume-accent-text {
-  color: var(--perfume-accent);
-}
-
-.colored-perfume-accent-glow {
-  text-shadow: 0 0 12px var(--perfume-glow);
-}
-
+.colored-perfume-accent-text { color: var(--perfume-accent); }
+.colored-perfume-accent-glow { text-shadow: 0 0 12px var(--perfume-glow); }
 .colored-perfume-badge {
   border-color: var(--perfume-badge-border);
   background-color: var(--perfume-badge-bg);
   color: var(--perfume-accent);
 }
+.colored-perfume-btn { border-color: var(--perfume-accent); color: var(--perfume-accent); }
+.colored-perfume-btn:hover { background-color: var(--perfume-accent); color: #050505 !important; }
+.colored-perfume-bag-btn { background-color: var(--perfume-accent); color: #050505 !important; }
+.colored-perfume-bag-btn:hover { filter: brightness(1.15); }
 
-.colored-perfume-btn {
-  border-color: var(--perfume-accent);
-  color: var(--perfume-accent);
+/* Mobile performance mode: preserve the visual style while avoiding expensive
+   GPU compositing and painting for content outside the viewport. */
+@media (max-width: 767px) {
+  html { scroll-behavior: auto; }
+
+  .colored-perfume-card,
+  #ingredients,
+  #story,
+  #gift-sets {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 760px;
+  }
+
+  .glass-perfume-card,
+  #luxury-navbar,
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .floating-island-mask {
+    /* iOS Safari can be slow and occasionally blank large masked JPGs. */
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .floating-island-glow,
+  .colored-perfume-bag-btn:hover {
+    filter: none;
+  }
+
+  .perfume-glow {
+    width: 180px;
+    height: 180px;
+    filter: blur(28px);
+    opacity: 0.55;
+  }
+
+  .text-gold-glow,
+  .text-gold-glow-subtle,
+  .colored-perfume-accent-glow {
+    text-shadow: none;
+  }
+
+  .colored-perfume-card *,
+  .animate-smoke,
+  .animate-gold-dust,
+  .animate-float {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
-.colored-perfume-btn:hover {
-  background-color: var(--perfume-accent);
-  color: #050505 !important;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
-
-.colored-perfume-bag-btn {
-  background-color: var(--perfume-accent);
-  color: #050505 !important;
-}
-
-.colored-perfume-bag-btn:hover {
-  filter: brightness(1.15);
-}
-
-
