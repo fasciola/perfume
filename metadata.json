@@ -1,0 +1,6 @@
+{
+  "name": "AL FAISAL Perfumes",
+  "description": "A premium luxury perfume ecommerce website for the UAE fragrance brand AL FAISAL Perfumes, featuring elegant Arabian scent traditions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
