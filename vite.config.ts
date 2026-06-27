@@ -25,9 +25,35 @@ function servePerfumeImages(): Plugin {
   };
 }
 
+/**
+ * The collection and gift-set images are below the fold. Add native lazy
+ * loading at build time without changing the generated application source.
+ */
+function lazyLoadBelowFoldImages(): Plugin {
+  return {
+    name: 'lazy-load-below-fold-images',
+    enforce: 'pre',
+    transform(code, id) {
+      if (!id.endsWith('/src/App.tsx')) return null;
+
+      const transformed = code
+        .replace(
+          'src={f.image}\n                         alt=',
+          'src={f.image}\n                         loading="lazy"\n                         decoding="async"\n                         alt='
+        )
+        .replace(
+          'src={gs.image}\n                       alt=',
+          'src={gs.image}\n                       loading="lazy"\n                       decoding="async"\n                       alt='
+        );
+
+      return transformed === code ? null : { code: transformed, map: null };
+    },
+  };
+}
+
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss(), servePerfumeImages()],
+    plugins: [react(), tailwindcss(), lazyLoadBelowFoldImages(), servePerfumeImages()],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
