@@ -4,6 +4,8 @@ import { cpSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'path';
 import { defineConfig, type Plugin } from 'vite';
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 function servePerfumeAssets(): Plugin {
   return {
     name: 'serve-perfume-assets',
@@ -63,7 +65,13 @@ function optimizeHeroAndMobileMotion(): Plugin {
 }
 
 export default defineConfig(() => ({
-  plugins: [react(), tailwindcss(), optimizeHeroAndMobileMotion(), servePerfumeAssets()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    optimizeHeroAndMobileMotion(),
+    servePerfumeAssets(),
+    cloudflare()
+  ],
   resolve: { alias: { '@': path.resolve(__dirname, '.') } },
   server: {
     hmr: process.env.DISABLE_HMR !== 'true',
