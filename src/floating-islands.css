@@ -1,0 +1,72 @@
+/* Lightweight transform-only floating motion for the perfume islands. */
+@keyframes perfumeIslandFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -8px, 0); }
+}
+
+@keyframes perfumeIslandDrift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(3px, -6px, 0); }
+}
+
+/* Product images only: no JavaScript, canvas, blur, or layout reflow. */
+.product-visual img {
+  animation: perfumeIslandFloat 7s ease-in-out infinite;
+}
+
+.product-row:nth-child(2) .product-visual img {
+  animation-name: perfumeIslandDrift;
+  animation-duration: 8s;
+  animation-delay: -1.4s;
+}
+
+.product-row:nth-child(3) .product-visual img {
+  animation-duration: 7.6s;
+  animation-delay: -3.1s;
+}
+
+.product-row:nth-child(4) .product-visual img {
+  animation-name: perfumeIslandDrift;
+  animation-duration: 8.4s;
+  animation-delay: -2.2s;
+}
+
+.product-row:nth-child(5) .product-visual img {
+  animation-duration: 7.3s;
+  animation-delay: -4s;
+}
+
+.product-row:nth-child(6) .product-visual img {
+  animation-name: perfumeIslandDrift;
+  animation-duration: 8.1s;
+  animation-delay: -2.8s;
+}
+
+.product-row:nth-child(7) .product-visual img {
+  animation-duration: 7.8s;
+  animation-delay: -5s;
+}
+
+/* The hero island moves as one layer, preserving its mobile image positioning. */
+.hero-media {
+  animation: perfumeIslandFloat 8.5s ease-in-out infinite;
+}
+
+@media (max-width: 899px) {
+  @keyframes perfumeIslandFloat {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -4px, 0); }
+  }
+
+  @keyframes perfumeIslandDrift {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(2px, -3px, 0); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-visual img,
+  .hero-media {
+    animation: none;
+  }
+}
