@@ -4,6 +4,8 @@ import { cpSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'path';
 import { defineConfig, type Plugin } from 'vite';
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 function copyPublicPerfumeAssets(): Plugin {
   return {
     name: 'copy-public-perfume-assets',
@@ -62,7 +64,13 @@ function optimizeHeroForMobile(): Plugin {
 }
 
 export default defineConfig(() => ({
-  plugins: [react(), tailwindcss(), optimizeHeroForMobile(), copyPublicPerfumeAssets()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    optimizeHeroForMobile(),
+    copyPublicPerfumeAssets(),
+    cloudflare()
+  ],
   resolve: {
     alias: {
       'motion/react': path.resolve(__dirname, 'src/lib/light-motion.tsx'),
