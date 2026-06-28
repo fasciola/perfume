@@ -21,11 +21,6 @@ function isAppFile(id: string) {
   return id.replace(/\\/g, '/').includes('/src/App.tsx');
 }
 
-/**
- * Desktop gets the lightweight looping commercial. Mobile gets an ordinary
- * image instead of a <video> element, which prevents Safari from rendering
- * the empty native play button when no mobile video source is selected.
- */
 function optimizeHeroForMobile(): Plugin {
   return {
     name: 'optimize-hero-for-mobile',
@@ -49,7 +44,7 @@ function optimizeHeroForMobile(): Plugin {
                     playsInline
                     preload="metadata"
                     poster={fragrances[0].image}
-                    className="hidden h-full w-full object-cover transition-all duration-[2.5s] group-hover:scale-105 floating-island-glow md:block"
+                    className="hidden h-full w-full object-cover floating-island-glow md:block"
                     aria-label="Oud Noir perfume commercial"
                   >
                     <source src="/src/assets/images/al-faisal-hero-light.mp4" type="video/mp4" />
@@ -57,19 +52,9 @@ function optimizeHeroForMobile(): Plugin {
                 </>`;
 
       let next = code.replace(heroImagePattern, heroVisual);
-
-      // Avoid seven continuous Motion animation loops on phones.
       next = next
-        .replace('animate={{ y: [0, -10, 0] }}', 'animate={typeof window !== \'undefined\' && window.innerWidth >= 768 ? { y: [0, -10, 0] } : undefined}')
-        .replace('animate={{ y: [0, -14, 0] }}', 'animate={typeof window !== \'undefined\' && window.innerWidth >= 768 ? { y: [0, -14, 0] } : undefined}')
-        .replace(
-          'src={f.image}\n                         alt=',
-          'src={f.image}\n                         loading="lazy"\n                         decoding="async"\n                         alt='
-        )
-        .replace(
-          'src={gs.image}\n                       alt=',
-          'src={gs.image}\n                       loading="lazy"\n                       decoding="async"\n                       alt='
-        );
+        .replace('src={f.image}\n                         alt=', 'src={f.image}\n                         loading="lazy"\n                         decoding="async"\n                         alt=')
+        .replace('src={gs.image}\n                       alt=', 'src={gs.image}\n                       loading="lazy"\n                       decoding="async"\n                       alt=');
 
       return next === code ? null : { code: next, map: null };
     },
@@ -79,7 +64,15 @@ function optimizeHeroForMobile(): Plugin {
 export default defineConfig(() => ({
   plugins: [react(), tailwindcss(), optimizeHeroForMobile(), copyPublicPerfumeAssets()],
   resolve: {
-    alias: { '@': path.resolve(__dirname, '.') },
+    alias: {
+      'motion/react': path.resolve(__dirname, 'src/lib/light-motion.tsx'),
+      '@': path.resolve(__dirname, '.'),
+    },
+  },
+  build: {
+    target: 'es2020',
+    sourcemap: false,
+    minify: 'esbuild',
   },
   server: {
     hmr: process.env.DISABLE_HMR !== 'true',
