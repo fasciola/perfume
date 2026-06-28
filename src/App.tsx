@@ -249,7 +249,7 @@ export default function App() {
   const totalCartItemsCount = cartItems.reduce((acc, curr) => acc + curr.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-luxury-black text-ivory relative selection:bg-gold selection:text-luxury-black">
+    <div className="min-h-screen bg-luxury-black text-ivory relative selection:bg-gold selection:text-luxury-black" style={{ overflowX: 'hidden' }}>
       
       {/* 0. Ambient Fluid Physics Cursor */}
       <SplashCursor />
