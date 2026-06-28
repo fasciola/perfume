@@ -25,6 +25,10 @@ function servePerfumeImages(): Plugin {
   };
 }
 
+function isAppFile(id: string) {
+  return id.replace(/\\/g, '/').includes('/src/App.tsx');
+}
+
 /**
  * Use the compressed commercial as the hero visual. It starts muted, loops
  * inline on iPhone, and only preloads metadata to protect mobile bandwidth.
@@ -34,7 +38,7 @@ function useHeroPerfumeVideo(): Plugin {
     name: 'use-hero-perfume-video',
     enforce: 'pre',
     transform(code, id) {
-      if (!id.endsWith('/src/App.tsx')) return null;
+      if (!isAppFile(id)) return null;
 
       const heroImagePattern = /<img\s+src=\{fragrances\[0\]\.image\}[\s\S]*?referrerPolicy="no-referrer"\s*\/>/;
       const heroVideo = `<video
@@ -65,7 +69,7 @@ function lazyLoadBelowFoldImages(): Plugin {
     name: 'lazy-load-below-fold-images',
     enforce: 'pre',
     transform(code, id) {
-      if (!id.endsWith('/src/App.tsx')) return null;
+      if (!isAppFile(id)) return null;
 
       const transformed = code
         .replace(
@@ -97,10 +101,7 @@ export default defineConfig(() => {
       },
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
   };
