@@ -26,6 +26,37 @@ function servePerfumeImages(): Plugin {
 }
 
 /**
+ * Use the compressed commercial as the hero visual. It starts muted, loops
+ * inline on iPhone, and only preloads metadata to protect mobile bandwidth.
+ */
+function useHeroPerfumeVideo(): Plugin {
+  return {
+    name: 'use-hero-perfume-video',
+    enforce: 'pre',
+    transform(code, id) {
+      if (!id.endsWith('/src/App.tsx')) return null;
+
+      const heroImagePattern = /<img\s+src=\{fragrances\[0\]\.image\}[\s\S]*?referrerPolicy="no-referrer"\s*\/>/;
+      const heroVideo = `<video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  poster={fragrances[0].image}
+                  className="h-full w-full object-cover transition-all duration-[2.5s] group-hover:scale-105 floating-island-glow"
+                  aria-label="Oud Noir perfume commercial"
+                >
+                  <source src="/src/assets/images/al-faisal-hero-light.mp4" type="video/mp4" />
+                </video>`;
+
+      const transformed = code.replace(heroImagePattern, heroVideo);
+      return transformed === code ? null : { code: transformed, map: null };
+    },
+  };
+}
+
+/**
  * The collection and gift-set images are below the fold. Add native lazy
  * loading at build time without changing the generated application source.
  */
@@ -53,7 +84,13 @@ function lazyLoadBelowFoldImages(): Plugin {
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss(), lazyLoadBelowFoldImages(), servePerfumeImages()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      useHeroPerfumeVideo(),
+      lazyLoadBelowFoldImages(),
+      servePerfumeImages(),
+    ],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
