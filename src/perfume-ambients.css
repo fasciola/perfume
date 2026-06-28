@@ -15,7 +15,7 @@
 .product-visual::after {
   position: absolute;
   inset: 7% -7% 4%;
-  z-index: -1;
+  z-index: 0;
   content: '';
   pointer-events: none;
 }
@@ -90,7 +90,7 @@
 .hero-media::before {
   position: absolute;
   inset: 6% -4% 2%;
-  z-index: -1;
+  z-index: 0;
   border-radius: 50%;
   background:
     radial-gradient(circle at 50% 49%, rgba(190, 117, 42, 0.31) 0 17%, transparent 52%),
@@ -98,6 +98,12 @@
     radial-gradient(circle at 21% 73%, rgba(104, 45, 15, 0.26) 0 7%, transparent 51%);
   content: '';
   pointer-events: none;
+}
+
+.hero-media__image,
+.hero-media__video {
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 719px) {
